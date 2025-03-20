@@ -1,0 +1,42 @@
+{
+    "regular": {
+        "title": "Angelus",
+        "verses": [
+            {
+                "verse": "O anjo do Senhor anunciou a Maria.",
+                "response": "E Ela concebeu do Espírito Santo."
+            },
+            {
+                "verse": "Eis aqui a escrava do Senhor.",
+                "response": "Faça-se em mim segundo a vossa palavra."
+            },
+            {
+                "verse": "E o Verbo divino se fez carne.",
+                "response": "E habitou entre nós."
+            },
+            {
+                "verse": "Rogai por nós Santa Mãe de Deus.",
+                "response": "Para que sejamos dignos das graças de Cristo."
+            }
+        ],
+        "prayer": "Oremos. Infundi, Senhor, nós Vos pedimos, em nossas almas a vossa graça, para que nós, que conhecemos pela Anunciação do Anjo a Encarnação de Jesus Cristo, vosso Filho, cheguemos por sua Paixão e sua Cruz à glória da Ressurreição. Pelo mesmo Jesus Cristo, Senhor nosso. Amém."
+    },
+    "easter": {
+        "title": "Regina Caeli",
+        "verses": [
+            {
+                "verse": "Rainha do Céu, alegrai-Vos, aleluia.",
+                "response": "Porque quem merecestes trazer em vosso seio, aleluia."
+            },
+            {
+                "verse": "Ressuscitou como disse, aleluia.",
+                "response": "Rogai a Deus por nós, aleluia."
+            },
+            {
+                "verse": "Exultai e alegrai-vos, ó Virgem Maria, aleluia.",
+                "response": "Porque o Senhor ressuscitou verdadeiramente, aleluia."
+            }
+        ],
+        "prayer": "Oremos. Ó Deus, que Vos dignastes alegrar o mundo com a Ressurreição do Vosso Filho Jesus Cristo, Senhor Nosso, concedei-nos, Vos suplicamos, que por sua Mãe, a Virgem Maria, alcancemos as alegrias da vida eterna. Por Cristo, Senhor Nosso. Amém."
+    }
+}

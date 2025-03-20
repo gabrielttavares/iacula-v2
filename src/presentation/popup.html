@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Jaculatory Prayers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cormorant Garamond', 'Garamond', serif;
+            background-color: transparent;
+            overflow: hidden;
+            user-select: none;
+            width: 220px;
+            height: 240px;
+        }
+
+        .container {
+            width: 220px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: transparent;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .container.show {
+            opacity: 1;
+        }
+
+        .container.fade-out {
+            opacity: 0;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .image-container {
+            width: 220px;
+            height: 240px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            border-radius: 8px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+            padding: 0;
+            border-radius: 8px;
+        }
+
+        .content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7) 70%, transparent);
+            color: white;
+            text-align: center;
+        }
+
+        #quote {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        /* Make the window draggable from anywhere except buttons */
+        body>* {
+            -webkit-app-region: drag;
+        }
+
+        button {
+            -webkit-app-region: no-drag;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <button class="close-button" id="closeButton">×</button>
+        <div class="image-container">
+            <img id="inspirationImage" src="" alt="Inspiration">
+            <div class="content">
+                <p id="quote"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        // Handle close button click
+        document.getElementById('closeButton').addEventListener('click', () => {
+            fadeOutAndClose();
+        });
+
+        function fadeOutAndClose() {
+            const container = document.getElementById('container');
+            container.classList.add('fade-out');
+            setTimeout(() => {
+                ipcRenderer.send('close-popup');
+            }, 300);
+        }
+
+        // Handle content updates
+        ipcRenderer.on('update-content', (_, content) => {
+            console.log('Received content update:', content);
+            const imageElement = document.getElementById('inspirationImage');
+            const quoteElement = document.getElementById('quote');
+            const container = document.getElementById('container');
+
+            // Reset state
+            container.classList.remove('show');
+            container.classList.remove('fade-out');
+
+            // Update content
+            if (content.quote && content.quote.text) {
+                quoteElement.textContent = content.quote.text;
+            }
+
+            if (content.imagePath) {
+                imageElement.src = `file://${content.imagePath}`;
+                // Show when image loads
+                imageElement.onload = () => {
+                    container.classList.add('show');
+                    ipcRenderer.send('content-ready');
+                };
+            } else {
+                // If no image, show immediately
+                container.classList.add('show');
+                ipcRenderer.send('content-ready');
+            }
+        });
+
+        // Handle auto-close
+        ipcRenderer.on('auto-close', () => {
+            fadeOutAndClose();
+        });
+    </script>
+</body>
+
+</html>

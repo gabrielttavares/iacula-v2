@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  tauri-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: npm run dev

@@ -1,0 +1,83 @@
+{
+    "build": {
+        "beforeDevCommand": "",
+        "beforeBuildCommand": "npm run build",
+        "devPath": "../dist",
+        "distDir": "../dist"
+    },
+    "package": {
+        "productName": "Iacula",
+        "version": "1.0.0"
+    },
+    "tauri": {
+        "allowlist": {
+            "all": true
+        },
+        "bundle": {
+            "active": true,
+            "category": "DeveloperTool",
+            "copyright": "© 2025 Gabriel T. Tavares",
+            "deb": {
+                "depends": []
+            },
+            "externalBin": [],
+            "icon": [
+                "icons/icon.png"
+            ],
+            "identifier": "com.iacula.dev",
+            "longDescription": "Cultivar Presença de Deus",
+            "macOS": {
+                "entitlements": null,
+                "exceptionDomain": "",
+                "frameworks": [],
+                "providerShortName": null,
+                "signingIdentity": null
+            },
+            "resources": [],
+            "shortDescription": "Cultivar Presença de Deus",
+            "targets": [
+                "msi",
+                "deb",
+                "dmg"
+            ],
+            "windows": {
+                "certificateThumbprint": null,
+                "digestAlgorithm": "sha256",
+                "timestampUrl": ""
+            }
+        },
+        "security": {
+            "csp": null
+        },
+        "systemTray": {
+            "iconPath": "icons/icon.png",
+            "iconAsTemplate": true
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "height": 260,
+                "resizable": false,
+                "title": "Iacula",
+                "width": 220,
+                "visible": false,
+                "decorations": false,
+                "transparent": true,
+                "skipTaskbar": true,
+                "label": "main"
+            },
+            {
+                "fullscreen": false,
+                "height": 600,
+                "resizable": true,
+                "title": "Configurações",
+                "width": 800,
+                "visible": false,
+                "decorations": true,
+                "transparent": false,
+                "skipTaskbar": false,
+                "label": "settings"
+            }
+        ]
+    }
+}
