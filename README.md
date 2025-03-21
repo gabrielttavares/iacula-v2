@@ -2,10 +2,11 @@
 
 ## tech
 
-- Tauri v2
+- Tauri v1
 - TypeScript
 - Rust
 - HTML/CSS
+- Docker
 
 ## install
 
@@ -40,5 +41,6 @@ npm run build
 
 ## contribute
 
-Feel free to contribute and send your PR! /n
+Feel free to contribute and send your PR!
+
 Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter pull requests.
