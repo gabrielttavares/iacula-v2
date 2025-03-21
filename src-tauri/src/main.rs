@@ -2,11 +2,8 @@
 
 use tauri::{Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use std::sync::Mutex;
-use std::time::Duration;
 use tauri::State;
 use serde::{Serialize, Deserialize};
-use std::fs;
-use std::path::PathBuf;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
 struct Config {
@@ -32,7 +29,7 @@ fn save_config(config: Config, state: State<'_, AppState>) -> Result<(), String>
 }
 
 #[tauri::command]
-fn show_save_dialog(title: &str, message: &str, buttons: Vec<&str>, default_id: u32, cancel_id: u32) -> Result<u32, String> {
+fn show_save_dialog(_title: &str, _message: &str, _buttons: Vec<&str>, _default_id: u32, _cancel_id: u32) -> Result<u32, String> {
     // TODO: Implement native dialog
     Ok(0)
 }
@@ -68,40 +65,42 @@ fn create_tray_menu() -> SystemTrayMenu {
 }
 
 fn main() {
+    println!("Starting application...");
+    
     let app_state = AppState {
         config: Mutex::new(Config::default()),
     };
+    
+    println!("Initializing Tauri builder...");
 
     tauri::Builder::default()
         .manage(app_state)
         .system_tray(SystemTray::new().with_menu(create_tray_menu()))
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                match id.as_str() {
-                    "show" => {
-                        let window = app.get_window("main").unwrap();
-                        window.show().unwrap();
-                    }
-                    "settings" => {
-                        if let Some(window) = app.get_window("settings") {
-                            window.set_focus().unwrap();
-                        } else {
-                            let settings_window = tauri::WindowBuilder::new(app, "settings", tauri::WindowUrl::App("settings.html".into()))
-                                .title("Configurações")
-                                .inner_size(800.0, 600.0)
-                                .resizable(true)
-                                .center()
-                                .build()
-                                .unwrap();
+        .on_system_tray_event(|app, event| {
+            println!("System tray event received");
+            match event {
+                SystemTrayEvent::MenuItemClick { id, .. } => {
+                    match id.as_str() {
+                        "show" => {
+                            let window = app.get_window("main").unwrap();
+                            window.show().unwrap();
                         }
+                        "settings" => {
+                            if let Some(window) = app.get_window("settings") {
+                                window.set_focus().unwrap();
+                            } else {
+                                let window = app.get_window("settings").unwrap();
+                                window.show().unwrap();
+                            }
+                        }
+                        "quit" => {
+                            app.exit(0);
+                        }
+                        _ => {}
                     }
-                    "quit" => {
-                        app.exit(0);
-                    }
-                    _ => {}
                 }
+                _ => {}
             }
-            _ => {}
         })
         .invoke_handler(tauri::generate_handler![
             get_config,
@@ -111,17 +110,10 @@ fn main() {
             close_settings_and_show_popup
         ])
         .setup(|app| {
-            let main_window = tauri::WindowBuilder::new(app, "main", tauri::WindowUrl::App("index.html".into()))
-                .title("Iacula")
-                .transparent(true)
-                .decorations(false)
-                .always_on_top(true)
-                .resizable(false)
-                .inner_size(220.0, 260.0)
-                .position(0.0, 0.0)
-                .build()?;
-            
-            main_window.hide()?;
+            println!("Setup complete, all windows defined in tauri.conf.json");
+            if let Some(window) = app.get_window("main") {
+                window.hide()?;
+            }
             Ok(())
         })
         .run(tauri::generate_context!())

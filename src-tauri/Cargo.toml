@@ -5,12 +5,12 @@ description = "Cultivar Presença de Deus"
 authors = ["Gabriel Tavares"]
 license = "ISC"
 repository = ""
-default-run = "app"
+default-run = "Iacula"
 edition = "2021"
 rust-version = "1.70"
 
 [[bin]]
-name = "app"
+name = "Iacula"
 path = "src/main.rs"
 
 [build-dependencies]
@@ -19,14 +19,5 @@ tauri-build = { version = "1.5.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.5.0", features = [
-    "system-tray",
-    "shell-open",
-    "window-create",
-    "window-show",
-    "window-hide",
-    "window-set-focus",
-    "window-close",
-    "dialog-all",
-    "path-all"
-] }
+tauri = { version = "1.5.0", features = [ "api-all",
+    "system-tray"] }
