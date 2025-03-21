@@ -64,7 +64,8 @@
                 "decorations": false,
                 "transparent": true,
                 "skipTaskbar": true,
-                "label": "main"
+                "label": "popup",
+                "url": "presentation/index.html"
             },
             {
                 "fullscreen": false,
@@ -76,7 +77,8 @@
                 "decorations": true,
                 "transparent": false,
                 "skipTaskbar": false,
-                "label": "settings"
+                "label": "settings",
+                "url": "presentation/settings.html"
             }
         ]
     }

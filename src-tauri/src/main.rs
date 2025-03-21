@@ -47,7 +47,7 @@ fn close_settings_and_show_popup(app: tauri::AppHandle) -> Result<(), String> {
     if let Some(window) = app.get_window("settings") {
         window.close().map_err(|e| e.to_string())?;
     }
-    if let Some(window) = app.get_window("main") {
+    if let Some(window) = app.get_window("popup") {
         window.show().map_err(|e| e.to_string())?;
     }
     Ok(())
@@ -82,15 +82,19 @@ fn main() {
                 SystemTrayEvent::MenuItemClick { id, .. } => {
                     match id.as_str() {
                         "show" => {
-                            let window = app.get_window("main").unwrap();
-                            window.show().unwrap();
+                            if let Some(window) = app.get_window("popup") {
+                                window.show().unwrap();
+                                window.set_focus().unwrap();
+                            } else {
+                                println!("Popup window not found!");
+                            }
                         }
                         "settings" => {
                             if let Some(window) = app.get_window("settings") {
+                                window.show().unwrap();
                                 window.set_focus().unwrap();
                             } else {
-                                let window = app.get_window("settings").unwrap();
-                                window.show().unwrap();
+                                println!("Settings window not found!");
                             }
                         }
                         "quit" => {
@@ -111,7 +115,7 @@ fn main() {
         ])
         .setup(|app| {
             println!("Setup complete, all windows defined in tauri.conf.json");
-            if let Some(window) = app.get_window("main") {
+            if let Some(window) = app.get_window("popup") {
                 window.hide()?;
             }
             Ok(())
