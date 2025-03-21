@@ -6,6 +6,7 @@
 - TypeScript
 - Rust
 - HTML/CSS
+- Docker
 
 ## install
 
