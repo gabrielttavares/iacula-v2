@@ -124,7 +124,10 @@
     </div>
 
     <script>
-        const { ipcRenderer } = require('electron');
+        // Import Tauri APIs
+        const { invoke } = window.__TAURI__.tauri;
+        const { emit, listen } = window.__TAURI__.event;
+        const { appWindow } = window.__TAURI__.window;
 
         // Handle close button click
         document.getElementById('closeButton').addEventListener('click', () => {
@@ -135,13 +138,15 @@
             const container = document.getElementById('container');
             container.classList.add('fade-out');
             setTimeout(() => {
-                ipcRenderer.send('close-popup');
+                // Use Tauri's emit instead of ipcRenderer.send
+                emit('close-popup');
             }, 300);
         }
 
-        // Handle content updates
-        ipcRenderer.on('update-content', (_, content) => {
-            console.log('Received content update:', content);
+        // Handle content updates using Tauri's listen API
+        listen('update-content', (event) => {
+            console.log('Received content update:', event.payload);
+            const content = event.payload;
             const imageElement = document.getElementById('inspirationImage');
             const quoteElement = document.getElementById('quote');
             const container = document.getElementById('container');
@@ -155,23 +160,30 @@
                 quoteElement.textContent = content.quote.text;
             }
 
-            if (content.imagePath) {
-                imageElement.src = `file://${content.imagePath}`;
+            if (content.image && content.image.path) {
+                imageElement.src = content.image.path;
                 // Show when image loads
                 imageElement.onload = () => {
                     container.classList.add('show');
-                    ipcRenderer.send('content-ready');
+                    // Use Tauri's emit instead of ipcRenderer.send
+                    emit('content-ready');
                 };
             } else {
                 // If no image, show immediately
                 container.classList.add('show');
-                ipcRenderer.send('content-ready');
+                emit('content-ready');
             }
         });
 
         // Handle auto-close
-        ipcRenderer.on('auto-close', () => {
+        listen('auto-close', () => {
             fadeOutAndClose();
+        });
+
+        // Log when window is ready
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Popup window loaded and ready');
+            emit('window-ready');
         });
     </script>
 </body>

@@ -48,6 +48,7 @@ async function createPopupWindow() {
     // Get screen dimensions using Tauri's API
     const { innerWidth, innerHeight } = window;
 
+    console.log('Creating popup window with URL: popup.html');
     const popupWindow = new WebviewWindow('popup', {
         url: 'popup.html',
         width: 220,
@@ -243,35 +244,45 @@ async function showSettings() {
 
 async function showPopup() {
     try {
+        console.log('showPopup() called');
+
         // Create popup window if it doesn't exist
         if (!popupWindow) {
+            console.log('Popup window doesn\'t exist, creating it');
             popupWindow = await createPopupWindow();
         }
 
         // Get new content
+        console.log('Getting content from contentService');
         const content = contentService.getCurrentContent();
+        console.log('Content retrieved:', JSON.stringify(content, null, 2));
+
         if (content && popupWindow) {
-            await popupWindow.emit('update-content', {
-                title: 'Jaculatória',
-                content: content.text,
-                responses: [],
-                source: content.source,
-                author: content.author
-            });
+            console.log('Emitting update-content event to popup window');
+            // Pass the DailyContent object directly, no need to restructure it
+            await popupWindow.emit('update-content', content);
+            console.log('Showing popup window');
             await popupWindow.show();
             await popupWindow.setFocus();
 
             // Set up auto-close timer
             const config = await configService.getConfig();
             const duration = Math.max(5, config.popupDuration || 10) * 1000;
+            console.log(`Setting auto-close timer for ${duration}ms`);
             if (autoCloseTimer) {
                 clearTimeout(autoCloseTimer);
             }
             autoCloseTimer = setTimeout(async () => {
+                console.log('Auto-close timer triggered');
                 if (popupWindow) {
                     await popupWindow.hide();
                 }
             }, duration);
+        } else {
+            console.error('No content or popup window available', {
+                contentExists: !!content,
+                popupWindowExists: !!popupWindow
+            });
         }
     } catch (error) {
         console.error('Error showing popup:', error);

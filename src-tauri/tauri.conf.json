@@ -2,8 +2,8 @@
     "build": {
         "beforeDevCommand": "",
         "beforeBuildCommand": "npm run build",
-        "devPath": "../dist",
-        "distDir": "../dist"
+        "devPath": "../dist/presentation",
+        "distDir": "../dist/presentation"
     },
     "package": {
         "productName": "Iacula",
@@ -65,7 +65,7 @@
                 "transparent": true,
                 "skipTaskbar": true,
                 "label": "popup",
-                "url": "presentation/index.html"
+                "url": "index.html"
             },
             {
                 "fullscreen": false,
@@ -78,7 +78,7 @@
                 "transparent": false,
                 "skipTaskbar": false,
                 "label": "settings",
-                "url": "presentation/settings.html"
+                "url": "settings.html"
             }
         ]
     }
