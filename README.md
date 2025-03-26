@@ -12,7 +12,7 @@
 
 1. Clone:
 ```bash
-git clone https://github.com/seu-usuario/iacula-v2.git
+git clone https://github.com/your-user/iacula-v2.git
 cd iacula
 ```
 
